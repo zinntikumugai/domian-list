@@ -1,0 +1,11 @@
+{
+  "domains": [
+    {
+      "name": "example.com",
+      "txt_record": {
+        "name": "example.com",
+        "record": "v=SelfDomain1; p=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      }
+    }
+  ]
+}
