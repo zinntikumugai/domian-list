@@ -42,6 +42,8 @@ npm run deploy:cf-workers # Cloudflare Workersにデプロイ
 
 ## 注意事項
 
-- domains.jsonは実際のドメイン情報を含むため注意して管理
+- domains.jsonは実際のドメイン情報を含むため.gitignoreで除外
+- 開発時は`npm run setup:domains`でdomains_example.jsonからコピー作成
+- 本番デプロイ時はGitHub VariablesのDOMAINS_JSONから自動生成
 - Webサーバーはすでに起動しています。再起動はユーザーに指示してください。
 - MCPを使いスクリーンショットを撮って確認してください。

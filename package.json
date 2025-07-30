@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev --host 0.0.0.0",
+		"dev": "npm run setup:domains && vite dev --host 0.0.0.0",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -14,7 +14,8 @@
 		"test:watch": "vitest",
 		"deploy": "npm run build && npm run preview",
 		"deploy:cf": "npm run build && wrangler deploy",
-		"deploy:cf-workers": "npm run build && wrangler deploy"
+		"deploy:cf-workers": "npm run build && wrangler deploy",
+		"setup:domains": "node scripts/create-domains-json.js"
 	},
 	"devDependencies": {
 		"@skeletonlabs/skeleton": "^3.1.7",

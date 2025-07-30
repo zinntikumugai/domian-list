@@ -27,6 +27,7 @@ npm run deploy:cf-workers # Cloudflare Workersにデプロイ
 
 ### Cloudflareデプロイ手順
 
+#### 手動デプロイ
 1. **Wrangler認証**
    ```bash
    npx wrangler login
@@ -36,6 +37,18 @@ npm run deploy:cf-workers # Cloudflare Workersにデプロイ
    ```bash
    npm run deploy:cf-workers  # フルスタックアプリとしてWorkers環境にデプロイ
    ```
+
+#### GitHub Actions自動デプロイ
+1. **GitHub Secrets設定**
+   - `CLOUDFLARE_API_TOKEN`: Cloudflare APIトークン
+   - `CLOUDFLARE_ACCOUNT_ID`: CloudflareアカウントID
+
+2. **GitHub Variables設定**
+   - `DOMAINS_JSON`: domains.jsonの内容（JSON形式）
+
+3. **自動デプロイ**
+   - mainブランチへのpushで自動デプロイ
+   - 手動実行も可能（workflow_dispatch）
 
 ## domains.json 形式
 
