@@ -1,13 +1,34 @@
 <script lang="ts">
-	import { mockDomains, mockStats, mockTLDInfo } from '$lib/mock-data';
-	import type { Domain, TLDInfo } from '$lib/types';
+	import { onMount } from 'svelte';
+	import { fetchDomains } from '$lib/api';
+	import { mockTLDInfo } from '$lib/mock-data';
+	import type { Domain, DomainStats, TLDInfo } from '$lib/types';
 
 	let searchQuery = '';
 	let statusFilter = 'all'; // 'all', 'verified', 'failed'
-	let filteredDomains = mockDomains;
+	let domains: Domain[] = [];
+	let stats: DomainStats = { total: 0, verified: 0 };
+	let filteredDomains: Domain[] = [];
+	let loading = true;
+	let error: string | null = null;
+
+	// APIからデータを取得
+	onMount(async () => {
+		try {
+			const response = await fetchDomains();
+			domains = response.domains;
+			stats = response.stats;
+			error = null;
+		} catch (err) {
+			error = 'データの取得に失敗しました';
+			console.error('Failed to load domains:', err);
+		} finally {
+			loading = false;
+		}
+	});
 
 	$: {
-		let filtered = mockDomains;
+		let filtered = domains;
 		
 		// 検索フィルター
 		if (searchQuery) {
@@ -42,7 +63,7 @@
 			<div class="flex items-center justify-center space-x-2">
 				<span class="text-2xl">🌐</span>
 				<div>
-					<div class="text-2xl font-bold">{mockStats.total}</div>
+					<div class="text-2xl font-bold">{stats.total}</div>
 					<div class="text-sm text-gray-600">登録済み数</div>
 				</div>
 			</div>
@@ -51,7 +72,7 @@
 			<div class="flex items-center justify-center space-x-2">
 				<span class="text-2xl">✅</span>
 				<div>
-					<div class="text-2xl font-bold">{mockStats.verified}</div>
+					<div class="text-2xl font-bold">{stats.verified}</div>
 					<div class="text-sm text-gray-600">認証済み</div>
 				</div>
 			</div>
@@ -80,30 +101,54 @@
 
 	<!-- ドメインリスト -->
 	<div class="space-y-4">
-		{#each filteredDomains as domain}
-			<div class="bg-white border border-gray-200 rounded-lg p-6">
-				<div class="flex justify-between items-start">
-					<div class="flex-grow">
-						<div class="flex items-center gap-3 mb-2">
-							<h3 class="text-xl font-semibold">{domain.name}</h3>
-							{#if domain.verified}
-								<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">✅ 認証済み</span>
-								<a href="https://{domain.name}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
-									<span class="text-lg">🌐</span>
-								</a>
-							{:else}
-								<span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">❌ 認証失敗</span>
-							{/if}
+		{#if loading}
+			<div class="text-center py-8">
+				<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+				<p class="text-gray-600">データを読み込み中...</p>
+			</div>
+		{:else if error}
+			<div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+				<div class="text-red-600 mb-2">⚠️ エラー</div>
+				<p class="text-red-700">{error}</p>
+				<button 
+					class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+					on:click={() => window.location.reload()}
+				>
+					再読み込み
+				</button>
+			</div>
+		{:else if filteredDomains.length === 0}
+			<div class="text-center py-8">
+				<p class="text-gray-600">条件に一致するドメインが見つかりません</p>
+			</div>
+		{:else}
+			{#each filteredDomains as domain}
+				<div class="bg-white border border-gray-200 rounded-lg p-6">
+					<div class="flex justify-between items-start">
+						<div class="flex-grow">
+							<div class="flex items-center gap-3 mb-2">
+								<h3 class="text-xl font-semibold">{domain.name}</h3>
+								{#if domain.verified}
+									<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">✅ 認証済み</span>
+								{:else}
+									<span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">❌ 認証失敗</span>
+								{/if}
+								{#if domain.url}
+									<a href="{domain.url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+										<span class="text-lg">🌐</span>
+									</a>
+								{/if}
+							</div>
+							<p class="text-sm text-gray-600 mb-2">{domain.description}</p>
 						</div>
-						<p class="text-sm text-gray-600 mb-2">{domain.description}</p>
-					</div>
-					<div class="text-right text-sm text-gray-500">
-						<div>最終更新日:</div>
-						<div>{domain.lastUpdated}</div>
+						<div class="text-right text-sm text-gray-500">
+							<div>最終更新日:</div>
+							<div>{domain.lastUpdated}</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/if}
 	</div>
 
 	<!-- TLD情報セクション -->
@@ -119,7 +164,12 @@
 					<div class="flex items-start gap-3">
 						<div class="px-2 py-1 bg-blue-100 text-blue-800 font-mono text-sm rounded">{tld.extension}</div>
 						<div class="flex-grow">
-							<h3 class="font-semibold mb-1">{tld.type}</h3>
+							<div class="flex items-center gap-2 mb-1">
+								<h3 class="font-semibold">{tld.type}</h3>
+								<span class="px-2 py-1 text-xs rounded-full {tld.category === 'ccTLD' ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800'}">
+									{tld.category}
+								</span>
+							</div>
 							<p class="text-sm text-gray-600">{tld.description}</p>
 						</div>
 					</div>

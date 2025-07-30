@@ -3,6 +3,7 @@ export interface Domain {
 	description: string;
 	verified: boolean;
 	lastUpdated: string;
+	url?: string;
 }
 
 export interface DomainStats {
@@ -14,4 +15,5 @@ export interface TLDInfo {
 	extension: string;
 	type: string;
 	description: string;
+	category: 'ccTLD' | 'gTLD';
 }

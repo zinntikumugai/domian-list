@@ -20,9 +20,11 @@
     "domains": [
         {
             "name": "example.com",
-            "txt_recode": {
+            "url": "https://example.com/",
+            "description": "ほげほげほげほげ",
+            "txt_record": {
                 "name": "example.com",
-                "recode": "v=SelfDomain1; p=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                "record": "v=SelfDomain1; p=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             }
         }
     ]
