@@ -1,5 +1,6 @@
-import { sampleDomainsData } from './domains-data';
+import { domainsData } from './domains-data';
 import { verifyAllDomains } from './dns-verifier';
+import { WebUIDomain, WebUIResponse } from './types';
 
 export interface Env {
   // KV namespace binding
@@ -31,13 +32,37 @@ export default {
     
     // Route handling
     if (url.pathname === '/api/domains' && request.method === 'GET') {
-      // Return the domain list from sample data
-      return new Response(JSON.stringify({ domains: sampleDomainsData.domains }), { headers });
+      // DNS検証を実行
+      const verificationResults = await verifyAllDomains(domainsData.domains);
+      
+      // Convert domains.json format to WebUI format with DNS verification results
+      const webUIDomains: WebUIDomain[] = domainsData.domains.map(domain => {
+        const verification = verificationResults.find(v => v.name === domain.name);
+        return {
+          name: domain.name,
+          description: domain.description || '',
+          verified: verification?.verified ?? false,
+          lastUpdated: domain.lastUpdated || new Date().toLocaleDateString('ja-JP'),
+          url: domain.url
+        };
+      });
+
+      const stats = {
+        total: webUIDomains.length,
+        verified: webUIDomains.filter(d => d.verified).length
+      };
+
+      const response: WebUIResponse = {
+        domains: webUIDomains,
+        stats
+      };
+
+      return new Response(JSON.stringify(response), { headers });
     }
     
     if (url.pathname === '/api/verify' && request.method === 'GET') {
       // Verify all domains
-      const verificationResults = await verifyAllDomains(sampleDomainsData.domains);
+      const verificationResults = await verifyAllDomains(domainsData.domains);
       return new Response(JSON.stringify({ verified: verificationResults }), { headers });
     }
     

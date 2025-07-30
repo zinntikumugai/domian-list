@@ -15,15 +15,23 @@ describe('Domain List API', () => {
       
       const data = await response.json();
       expect(data).toHaveProperty('domains');
+      expect(data).toHaveProperty('stats');
       expect(Array.isArray(data.domains)).toBe(true);
       expect(data.domains.length).toBeGreaterThan(0);
       
-      // Check domain structure
+      // Check domain structure (WebUI format)
       const domain = data.domains[0];
       expect(domain).toHaveProperty('name');
-      expect(domain).toHaveProperty('txt_record');
-      expect(domain.txt_record).toHaveProperty('name');
-      expect(domain.txt_record).toHaveProperty('record');
+      expect(domain).toHaveProperty('description');
+      expect(domain).toHaveProperty('verified');
+      expect(domain).toHaveProperty('lastUpdated');
+      expect(typeof domain.verified).toBe('boolean');
+      
+      // Check stats structure
+      expect(data.stats).toHaveProperty('total');
+      expect(data.stats).toHaveProperty('verified');
+      expect(typeof data.stats.total).toBe('number');
+      expect(typeof data.stats.verified).toBe('number');
     });
     
     it('should include CORS headers', async () => {
