@@ -43,3 +43,5 @@ cd website && npm run check  # TypeScript型チェック
 
 - domains.jsonは.gitignoreに含まれている（実際のドメイン情報を含むため）
 - Workers APIにはまだKV/D1バインディングが設定されていない（コメントアウト状態）
+- Webサーバーはすでに起動しています。再起動はユーザーに指示してください。
+- MCPを使いスクリーンショットを撮って確認してください。

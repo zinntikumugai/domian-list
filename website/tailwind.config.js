@@ -1,12 +1,14 @@
+import { skeleton } from '@skeletonlabs/tw-plugin';
+
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{svelte,js,ts,jsx,tsx}",
-  ],
-  darkMode: 'class',
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
+	darkMode: 'class',
+	content: [
+		'./src/**/*.{html,js,svelte,ts}',
+		'./node_modules/@skeletonlabs/skeleton/**/*.{html,js,svelte,ts}'
+	],
+	theme: {
+		extend: {}
+	},
+	plugins: [skeleton]
+};

@@ -1,3 +1,6 @@
+import { sampleDomainsData } from './domains-data';
+import { verifyAllDomains } from './dns-verifier';
+
 export interface Env {
   // KV namespace binding
   // DOMAINS_KV: KVNamespace;
@@ -28,13 +31,14 @@ export default {
     
     // Route handling
     if (url.pathname === '/api/domains' && request.method === 'GET') {
-      // TODO: Implement domain list retrieval
-      return new Response(JSON.stringify({ domains: [] }), { headers });
+      // Return the domain list from sample data
+      return new Response(JSON.stringify({ domains: sampleDomainsData.domains }), { headers });
     }
     
     if (url.pathname === '/api/verify' && request.method === 'GET') {
-      // TODO: Implement domain verification
-      return new Response(JSON.stringify({ verified: [] }), { headers });
+      // Verify all domains
+      const verificationResults = await verifyAllDomains(sampleDomainsData.domains);
+      return new Response(JSON.stringify({ verified: verificationResults }), { headers });
     }
     
     // 404 for unknown routes

@@ -8,7 +8,9 @@
     "dev:website": "cd website && npm run dev",
     "build:workers": "wrangler deploy",
     "build:website": "cd website && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:workers && npm run test:website",
+    "test:workers": "cd workers && npm run test:run",
+    "test:website": "cd website && npm run test:run"
   },
   "repository": {
     "type": "git",
@@ -22,9 +24,11 @@
   },
   "homepage": "https://github.com/zinntikumugai/domian-list#readme",
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.58",
     "@cloudflare/workers-types": "^4.20250726.0",
     "@types/node": "^24.1.0",
     "typescript": "^5.8.3",
+    "vitest": "^3.2.4",
     "wrangler": "^4.26.1"
   }
 }
