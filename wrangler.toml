@@ -1,5 +1,7 @@
-name = "domain-list-api"
-main = "workers/src/index.ts"
+name = "domain-list"
+main = ".svelte-kit/cloudflare/_worker.js"
+site.bucket = ".svelte-kit/cloudflare/static"
+build.command = "npm run build"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 

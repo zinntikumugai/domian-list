@@ -1,20 +1,44 @@
-# domian-list
+# Domain List
 
-所有ドメインを署名する為のシステム
+所有ドメインを署名する為のシステム。SvelteKitでWebUIを表示し、内蔵APIでドメイン検証を行います。
 
-以下から構成する
-- Webサイト: WebUIとして所有ドメインとその署名の確認を表示する。
-    - Cloudflare Wokersを使用する。
-    - TypeScript使用する。
+## セットアップ
 
-## ロジック
+```bash
+npm install
+```
 
-1. 所有ドメインをJSONに記録する。
-2. 各ドメインに検証用レコードを発行(値はJSONで記録)、DNS登録を依頼する(手動)
-3. Webサイト閲覧時APIをコールして所有ドメイン一覧と確認済みを列挙する
+## 開発
 
-## domain.json
-ドメイン一覧と期待されるレコードの値を記録する。
+```bash
+npm run dev     # 開発サーバー起動 (localhost:5173)
+```
+
+## ビルド・デプロイ
+
+```bash
+npm run build   # プロダクションビルド
+npm run preview # ビルド結果をプレビュー
+
+# Cloudflareデプロイ
+npm run deploy:cf         # Cloudflare Pagesにデプロイ
+npm run deploy:cf-workers # Cloudflare Workersにデプロイ
+```
+
+### Cloudflareデプロイ手順
+
+1. **Wrangler認証**
+   ```bash
+   npx wrangler login
+   ```
+
+2. **デプロイ**
+   ```bash
+   npm run deploy:cf-workers  # フルスタックアプリとしてWorkers環境にデプロイ
+   ```
+
+## domains.json 形式
+
 ```json
 {
     "domains": [
@@ -31,7 +55,26 @@
 }
 ```
 
-## Webサイト
-- ベース: SveltKitを用いる
-- CSS: tailwindを用いる
-- ダークモード：対応する
+## DNS設定
+
+各ドメインには、domains.jsonで指定されたTXTレコードを設定してください：
+
+```
+TXT レコード: v=SelfDomain1; p=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+## アーキテクチャ
+
+- **フロントエンド**: SvelteKit (Tailwind CSS, ダークモード対応)
+- **API**: SvelteKitの内蔵APIルート
+  - `/api/domains` - ドメイン一覧取得とDNS検証
+  - `/api/verify` - ドメイン検証状態確認
+- **DNS検証**: Cloudflare DNS over HTTPSでリアルタイム検証
+
+## 機能
+
+- ドメイン一覧表示
+- リアルタイムDNS検証
+- ステータスフィルタリング
+- TLD情報表示（ccTLD/gTLD分類付き）
+- レスポンシブデザイン
