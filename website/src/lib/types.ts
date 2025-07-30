@@ -14,5 +14,4 @@ export interface TLDInfo {
 	extension: string;
 	type: string;
 	description: string;
-	example: string;
 }

@@ -54,37 +54,31 @@ export const mockTLDInfo: TLDInfo[] = [
 	{
 		extension: '.cc',
 		type: 'Cocos (Keeling) Islands',
-		description: 'ココス諸島の国別コードトップレベルドメイン、クリエイティブプロジェクトやクールなサイトに使用されています。',
-		example: '例: 2in3.cc'
+		description: 'ココス諸島の国別コードトップレベルドメイン、クリエイティブプロジェクトやクールなサイトに使用されています。'
 	},
 	{
 		extension: '.com',
 		type: 'Commercial',
-		description: '最も一般的なトップレベルドメイン、商用サイトに主に利用されています。現在は用途が多様化して利用されています。',
-		example: '例: example-corp.com'
+		description: '最も一般的なトップレベルドメイン、商用サイトに主に利用されています。現在は用途が多様化して利用されています。'
 	},
 	{
 		extension: '.net',
 		type: 'Network',
-		description: 'ネットワーク関連事業向けに作られたトップレベルドメイン、現在は用途に関わらず多く利用されています。',
-		example: '例: secure-business.net'
+		description: 'ネットワーク関連事業向けに作られたトップレベルドメイン、現在は用途に関わらず多く利用されています。'
 	},
 	{
 		extension: '.org',
 		type: 'Organization',
-		description: '非営利組織向けに作られたトップレベルドメイン、現在は組織でなくとも利用されています。',
-		example: '例: failed-domain.org'
+		description: '非営利組織向けに作られたトップレベルドメイン、現在は組織でなくとも利用されています。'
 	},
 	{
 		extension: '.io',
 		type: 'British Indian Ocean Territory',
-		description: '英領インド洋地域の国別コードトップレベルドメイン、テック系スタートアップに人気の拡張子です。',
-		example: '例: startup-tech.io'
+		description: '英領インド洋地域の国別コードトップレベルドメイン、テック系スタートアップに人気の拡張子です。'
 	},
 	{
 		extension: '.dev',
 		type: 'Developer',
-		description: '開発者向けのトップレベルドメイン、HTTPSが必須で、開発者やテック企業に多く利用されています。',
-		example: '例: portfolio-site.dev'
+		description: '開発者向けのトップレベルドメイン、HTTPSが必須で、開発者やテック企業に多く利用されています。'
 	}
 ];
