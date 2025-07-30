@@ -5,7 +5,7 @@ export interface APIResponse {
   stats: DomainStats;
 }
 
-const API_BASE_URL = 'http://localhost:8787';
+const API_BASE_URL = '';
 
 export async function fetchDomains(): Promise<APIResponse> {
   try {
