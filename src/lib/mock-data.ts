@@ -72,5 +72,11 @@ export const mockTLDInfo: TLDInfo[] = [
 		type: 'Palau / Professional Web',
 		description: 'パラオ共和国の国別コードTLD、「Professional Web」の略としても使われ、プロフェッショナル向けサイトに人気です。',
 		category: 'ccTLD'
+	},
+	{
+		extension: '.si',
+		type: 'Slovenia',
+		description: 'スロベニアの国別コードTLD、短くシンプルな文字列で、個人サイトやイノベーティブなプロジェクトに活用されています。',
+		category: 'ccTLD'
 	}
 ];
